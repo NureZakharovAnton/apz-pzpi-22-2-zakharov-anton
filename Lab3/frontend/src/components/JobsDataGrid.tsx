@@ -11,18 +11,36 @@ const columns: GridColDef[] = [
   { field: 'status', headerName: 'Status', width: 120 },
 ];
 
-const mockJobs = [
-  { id: '1', name: 'Job 1', description: 'Desc 1', price: 100, creator: 'Alice', status: 'inProgress' },
-  { id: '2', name: 'Job 2', description: 'Desc 2', price: 200, creator: 'Bob', status: 'completed' },
-];
-
 export default function JobsDataGrid() {
   const [rows, setRows] = useState<any[]>([]);
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 5 });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setRows(mockJobs);
+    setLoading(true);
+    setError(null);
+    const token = localStorage.getItem('accessToken');
+    fetch('/api/v1/jobs', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to fetch jobs');
+        return res.json();
+      })
+      .then((data) => {
+        setRows(data.map((row: any) => ({ ...row, id: row._id })));
+      })
+      .catch((err) => {
+        setError(err.message);
+      })
+      .finally(() => setLoading(false));
   }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div style={{ height: 400, width: '100%' }}>

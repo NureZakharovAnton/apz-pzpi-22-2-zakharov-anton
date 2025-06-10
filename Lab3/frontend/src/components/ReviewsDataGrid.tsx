@@ -11,18 +11,36 @@ const columns: GridColDef[] = [
   { field: 'comment', headerName: 'Comment', width: 200 },
 ];
 
-const mockReviews = [
-  { id: '1', job: 'Job 1', reviewer: 'Alice', reviewee: 'Bob', rating: 5, comment: 'Great work!' },
-  { id: '2', job: 'Job 2', reviewer: 'Bob', reviewee: 'Alice', rating: 4, comment: 'Good job.' },
-];
-
 export default function ReviewsDataGrid() {
   const [rows, setRows] = useState<any[]>([]);
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 5 });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setRows(mockReviews);
+    setLoading(true);
+    setError(null);
+    const token = localStorage.getItem('accessToken');
+    fetch('/api/v1/reviews', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to fetch reviews');
+        return res.json();
+      })
+      .then((data) => {
+        setRows(data.map((row: any) => ({ ...row, id: row._id })));
+      })
+      .catch((err) => {
+        setError(err.message);
+      })
+      .finally(() => setLoading(false));
   }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div style={{ height: 400, width: '100%' }}>

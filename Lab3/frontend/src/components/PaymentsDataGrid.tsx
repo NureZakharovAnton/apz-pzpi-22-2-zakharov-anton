@@ -10,18 +10,36 @@ const columns: GridColDef[] = [
   { field: 'status', headerName: 'Status', width: 120 },
 ];
 
-const mockPayments = [
-  { id: '1', job: 'Job 1', user: 'Alice', amount: 100, status: 'paid' },
-  { id: '2', job: 'Job 2', user: 'Bob', amount: 200, status: 'pending' },
-];
-
 export default function PaymentsDataGrid() {
   const [rows, setRows] = useState<any[]>([]);
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 5 });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setRows(mockPayments);
+    setLoading(true);
+    setError(null);
+    const token = localStorage.getItem('accessToken');
+    fetch('/api/v1/payments', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to fetch payments');
+        return res.json();
+      })
+      .then((data) => {
+        setRows(data.map((row: any) => ({ ...row, id: row._id })));
+      })
+      .catch((err) => {
+        setError(err.message);
+      })
+      .finally(() => setLoading(false));
   }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div style={{ height: 400, width: '100%' }}>

@@ -18,11 +18,33 @@ const mockUsers = [
 export default function UsersDataGrid() {
   const [rows, setRows] = useState<any[]>([]);
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 5 });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Replace with fetch('/api/users') or similar
-    setRows(mockUsers);
+    setLoading(true);
+    setError(null);
+    const token = localStorage.getItem('accessToken');
+    fetch('/api/v1/users', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to fetch users');
+        return res.json();
+      })
+      .then((data) => {
+        setRows(data.map((row: any) => ({ ...row, id: row._id })));
+      })
+      .catch((err) => {
+        setError(err.message);
+      })
+      .finally(() => setLoading(false));
   }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div style={{ height: 400, width: '100%' }}>
