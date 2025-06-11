@@ -67,22 +67,420 @@
 В ході розробки проекту було створено комплексну UML діаграму прецедентів та ER діаграму для системи. На основі цієї документації було розроблено базу даних MongoDB з відповідними колекціями та схемами, а також створено детальну API документацію за допомогою Postman. Серверна частина системи була реалізована з використанням сучасного фреймворку NestJS, який забезпечує модульну архітектуру та підтримку TypeScript. Для роботи з базою даних було обрано Mongoose ODM, що надає зручні інструменти для управління схемами та валідації даних. Валідація запитів забезпечується за допомогою class-validator та class-transformer, а тестування API здійснювалось через Postman.
  
 ДОДАТОК А
-UML ДІАГРАМА ПРЕЦЕДЕНТІВ
+Відеозапис
 
- 
-Рис А.1. UML діаграма прецедентів
- 
+     Відеозапис презентації результатів лабораторної роботи: https://youtu.be/V_vXy5z5R6E
+
+Хронологічний опис відеозапису: 
+00:00 - Тестування Users API
+02:33 - Тестування Auth API
+03:56 - Тестування Jobs API
+05:48 - Тестування Proposals API
+07:02 - Тестування Job Attempts API
+07:59 - Тестування Payments API
+08:16 - Тестування Reviews API
+08:51 - Тестування валідації
+
 ДОДАТОК Б
-ER ДІАГРАМА БАЗИ ДАНИХ
-    
-Рис Б.1. ER діаграма бази даних
- 
-ДОДАТОК В
-ДІАГРАМА СТРУКТУРИ БАЗИ ДАНИХ
+Графічні матеріали
 
- 
-Рис В.1. Діаграма структури бази даних
- 
+Рисунок Б.1 — ER-діаграма даних
+
+
+Рисунок Б.2 — Структура бази даних
+
+
+Рисунок Б.3 — UML-діаграма прецедентів
+
+
+Рисунок Б.3 – UML діаграма розгортання
+
+
+Рисунок Б.4 – Діаграма діяльності для створення резервної копії та відновлення бази даних
+
+
+Рисунок Б.5 – Діаграма діяльності для аналізу даних кімнати (кореляційний та регресійний аналіз)
+
+ДОДАТОК В
+Програмний код
+
+В.1 Математична обробка прикладних даних. Код файлу з розрахунком рівняння лінійної регресії та кореляційного аналізу.
+GitHub репозиторій: https://github.com/NureZakharovAnton/apz-pzpi-22-2-zakharov-anton
+
+Фрагмент сервісу auth модуля:
+1  @Injectable()
+2  export class AuthService {
+3    constructor(
+4      private readonly usersService: UsersService,
+5      private readonly jwtService: JwtService,
+6    ) {}
+7
+8    async login(email: string, password: string) {
+9      const user = await this.validateUser(email, password);
+10     if (!user) {
+11       throw new UnauthorizedException('Invalid credentials');
+12     }
+13
+14     const payload = { sub: user._id, email: user.email };
+15     const accessToken = this.jwtService.sign(payload);
+16
+17     return { accessToken };
+18   }
+19
+20   async register(userDto: CreateUserDto) {
+21     const hashedPassword = await bcrypt.hash(userDto.password, 10);
+22     const newUser = { ...userDto, password: hashedPassword };
+23     return this.usersService.create(newUser);
+24   }
+25
+26   async validateUser(email: string, password: string) {
+27     const user = await this.usersService.findByEmail(email);
+28     if (user && (await bcrypt.compare(password, user.password))) {
+29       return user;
+30     }
+31
+32     return null;
+33   }
+34 }
+
+Фрагмент контролеру auth модуля:
+1  @Controller('auth')
+2  export class AuthController {
+3    constructor(private readonly authService: AuthService) {}
+4
+5    @Public()
+6    @Post('login')
+7    async login(@Body() body: LoginDto) {
+8      return this.authService.login(body.email, body.password);
+9    }
+10
+11   @Public()
+12   @Post('register')
+13   async register(@Body() body: CreateUserDto) {
+14     return this.authService.register(body);
+15   }
+16 }
+
+Фрагмент auth модуля:
+1  @Module({
+2    imports: [
+3      UsersModule,
+4      JwtModule.registerAsync({
+5        global: true,
+6        imports: [ConfigModule],
+7        useFactory: async (configService: ConfigService) => ({
+8          secret: configService.get<string>('JWT_SECRET'),
+9          signOptions: { expiresIn: '1d' },
+10       }),
+11       inject: [ConfigService],
+12     }),
+13   ],
+14   controllers: [AuthController],
+15   providers: [AuthService],
+16   exports: [AuthService],
+17 })
+
+Фрагмент схеми user:
+1  @Schema({ timestamps: true })
+2  export class User {
+3    @Prop({ required: true })
+4    name: string;
+5
+6    @Prop({ required: true, unique: true })
+7    email: string;
+8
+9    @Prop({ required: true })
+10   password: string;
+11
+12   @Prop({ required: true, enum: USER_ROLES_VALUES })
+13   role: UserRole;
+14 }
+
+Фрагмент сервісу users модуля:
+1  @Injectable()
+2  export class UsersService {
+3    constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+4
+5    async create(createUserDto: CreateUserDto) {
+6      const user = this.userModel.create(createUserDto);
+7      return user;
+8    }
+9
+10   async findAll() {
+11     const user = await this.userModel.find().exec();
+12     return user;
+13   }
+14
+15   async findByEmail(email: string) {
+16     const user = await this.userModel.findOne({ email }).exec();
+17     return user;
+18   }
+19
+20   async findById(id: string) {
+21     const user = await this.userModel.findById(id).exec();
+22     return user;
+23   }
+24
+25   async updateById(id: string, updateUserDto: UpdateUserDto) {
+26     const user = await this.userModel.findOneAndUpdate(
+27       { _id: id },
+28       updateUserDto,
+29       {
+30         new: true,
+31       },
+32     );
+33
+34     return user;
+35   }
+36
+37   async deleteById(id: string) {
+38     const user = await this.userModel.findOneAndDelete({ _id: id });
+39     return user;
+40   }
+41 }
+
+Фрагмент контролеру users модуля:
+1  @Controller('users')
+2  export class UsersController {
+3    constructor(private readonly userService: UsersService) {}
+4
+5    @Post()
+6    async create(@Body() body: CreateUserDto) {
+7      return this.userService.create(body);
+8    }
+9
+10   @Get()
+11   async findAll() {
+12     return this.userService.findAll();
+13   }
+14
+15   @Get('me')
+16   getProfile(@Request() req) {
+17     return req.user;
+18   }
+19
+20   @Get(':id')
+21   async findById(@Param('id') id: string) {
+22     return this.userService.findById(id);
+23   }
+24
+25   @Put(':id')
+26   async updateById(@Param('id') id: string, @Body() body: UpdateUserDto) {
+27     return this.userService.updateById(id, body);
+28   }
+29
+30   @Delete('me')
+31   async deleteById(@Request() req) {
+32     const id = req.user?.sub;
+33
+34     return this.userService.deleteById(id);
+35   }
+36 }
+
+В.2 Резервне копіювання користувацьких даних
+GitHub репозиторій: https://github.com/NureZakharovAnton/apz-pzpi-22-2-zakharov-anton/blob/main/Lab2/backend/src/modules/backups/backups.service.ts
+
+import { Injectable } from '@nestjs/common';
+import { exec } from 'child_process';
+import { promisify } from 'util';
+import * as path from 'path';
+import * as fs from 'fs';
+
+const execAsync = promisify(exec);
+
+@Injectable()
+export class BackupsService {
+  private readonly backupDir = path.join(process.cwd(), 'backups');
+
+  constructor() {
+    if (!fs.existsSync(this.backupDir)) {
+      fs.mkdirSync(this.backupDir, { recursive: true });
+    }
+  }
+
+  async createBackup() {
+    try {
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      const backupPath = path.join(this.backupDir, `backup-${timestamp}`);
+
+      const command = `mongodump --uri="${process.env.MONGO_URI}" --out="${backupPath}"`;
+
+      const { stderr } = await execAsync(command);
+
+      if (stderr && !stderr.includes('done dumping')) {
+        throw new Error(stderr);
+      }
+
+      return {
+        success: true,
+        message: 'Backup created successfully',
+        path: backupPath,
+        timestamp,
+      };
+    } catch (error) {
+      throw new Error(`Backup failed: ${error.message}`);
+    }
+  }
+
+  async listBackups() {
+    try {
+      const files = await fs.promises.readdir(this.backupDir);
+      return files.map((file) => ({
+        name: file,
+        path: path.join(this.backupDir, file),
+        createdAt: fs.statSync(path.join(this.backupDir, file)).birthtime,
+      }));
+    } catch (error) {
+      throw new Error(`Failed to list backups: ${error.message}`);
+    }
+  }
+
+  async restoreBackup(backupName: string) {
+    try {
+      const backupPath = path.join(this.backupDir, backupName, 'db');
+
+      if (!fs.existsSync(backupPath)) {
+        throw new Error('Backup not found');
+      }
+
+      const command = `mongorestore --uri="${process.env.MONGO_URI}" --drop --nsInclude="db.*" "${backupPath}"`;
+
+      const { stderr } = await execAsync(command);
+
+      if (stderr && !stderr.includes('successfully')) {
+        throw new Error(stderr);
+      }
+
+      const successMatch = stderr.match(
+        /(\d+) document\(s\) restored successfully/,
+      );
+      const restoredCount = successMatch ? parseInt(successMatch[1]) : 0;
+
+      return {
+        success: true,
+        message: `Backup restored successfully. ${restoredCount} documents restored.`,
+        backupName,
+        restoredCount,
+      };
+    } catch (error) {
+      throw new Error(`Restore failed: ${error.message}`);
+    }
+  }
+}
+
+import { Controller, Post, Get, Param } from '@nestjs/common';
+import { Roles } from '../users/users.decorators';
+import { USER_ROLES } from '../users/user.constants';
+import { BackupsService } from './backups.service';
+
+@Roles(USER_ROLES.ADMIN)
+@Controller('backups')
+export class BackupsController {
+  constructor(private readonly backupService: BackupsService) {}
+
+  @Get()
+  async listBackups() {
+    return this.backupService.listBackups();
+  }
+
+  @Post()
+  async createBackup() {
+    return this.backupService.createBackup();
+  }
+
+  @Post(':name')
+  async restoreBackup(@Param('name') name: string) {
+    return this.backupService.restoreBackup(name);
+  }
+}
+
+В.3 Адміністрування бізнес-логіки системи
+GitHub репозиторій: https://github.com/NureZakharovAnton/apz-pzpi-22-2-zakharov-anton/blob/main/Lab2/backend/src/modules/users/users.guards.ts
+
+import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import { UserRole } from './user.types';
+import { ALLOW_SAME_USER, ROLES_KEY } from './users.decorators';
+
+@Injectable()
+export class RolesGuard implements CanActivate {
+  constructor(private reflector: Reflector) {}
+
+  canActivate(context: ExecutionContext): boolean {
+    const requiredRoles = this.reflector.getAllAndOverride<UserRole[]>(
+      ROLES_KEY,
+      [context.getHandler(), context.getClass()],
+    );
+
+    const isSameUserAllowed = this.reflector.getAllAndOverride<boolean>(
+      ALLOW_SAME_USER,
+      [context.getHandler(), context.getClass()],
+    );
+
+    if (!requiredRoles) {
+      return true;
+    }
+
+    const { user } = context.switchToHttp().getRequest();
+
+    const isSameUser = user?.sub === context.getArgs()[0].params.id;
+    const isRoleAllowed = this.matchRoles(requiredRoles, user.role);
+
+    const isAllowed = isRoleAllowed || (isSameUserAllowed && isSameUser);
+    return isAllowed;
+  }
+
+  matchRoles(requiredRoles: UserRole[], userRole: UserRole) {
+    return requiredRoles.some((role) => userRole?.includes(role));
+  }
+}
+
+Приклад використання:
+
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Roles } from '../users/users.decorators';
+import { USER_ROLES } from '../users/user.constants';
+import { MailService } from '../mail/mail.service';
+import { User } from '../users/user.entity';
+import { PaymentService } from './payments.service';
+import { CreatePaymentDto } from './payments.dto';
+
+@Controller('payments')
+export class PaymentController {
+  constructor(
+    private readonly paymentService: PaymentService,
+    private readonly mailService: MailService,
+  ) {}
+
+  @Roles(USER_ROLES.ADMIN, USER_ROLES.CUSTOMER)
+  @Post()
+  async create(@Body() body: CreatePaymentDto) {
+    const payment = await this.paymentService.create(body);
+    await payment.populate('user');
+    const user = payment.user as unknown as User;
+
+    this.mailService.sendInvoiceEmail({
+      email: user.email,
+      name: user.name,
+      amount: payment.amount,
+      invoiceNumber: payment.id,
+    });
+
+    return payment;
+  }
+
+  @Roles(USER_ROLES.ADMIN)
+  @Get()
+  async findAll() {
+    return this.paymentService.findAll();
+  }
+
+  @Get(':id')
+  async findById(@Param('id') id: string) {
+    return this.paymentService.findById(id);
+  }
+}
+
 ДОДАТОК Г
 СПЕЦИФІКАЦІЯ API
 
@@ -775,181 +1173,3 @@ All endpoints follow consistent error response format:
     ],
     "code": "400"
 }
- 
-ДОДАТОК Д
-ПРОГРАМНИЙ КОД
-
-Фрагмент сервісу auth модуля:
-1  @Injectable()
-2  export class AuthService {
-3    constructor(
-4      private readonly usersService: UsersService,
-5      private readonly jwtService: JwtService,
-6    ) {}
-7
-8    async login(email: string, password: string) {
-9      const user = await this.validateUser(email, password);
-10     if (!user) {
-11       throw new UnauthorizedException('Invalid credentials');
-12     }
-13
-14     const payload = { sub: user._id, email: user.email };
-15     const accessToken = this.jwtService.sign(payload);
-16
-17     return { accessToken };
-18   }
-19
-20   async register(userDto: CreateUserDto) {
-21     const hashedPassword = await bcrypt.hash(userDto.password, 10);
-22     const newUser = { ...userDto, password: hashedPassword };
-23     return this.usersService.create(newUser);
-24   }
-25
-26   async validateUser(email: string, password: string) {
-27     const user = await this.usersService.findByEmail(email);
-28     if (user && (await bcrypt.compare(password, user.password))) {
-29       return user;
-30     }
-31
-32     return null;
-33   }
-34 }
-
-Фрагмент контролеру auth модуля:
-1  @Controller('auth')
-2  export class AuthController {
-3    constructor(private readonly authService: AuthService) {}
-4
-5    @Public()
-6    @Post('login')
-7    async login(@Body() body: LoginDto) {
-8      return this.authService.login(body.email, body.password);
-9    }
-10
-11   @Public()
-12   @Post('register')
-13   async register(@Body() body: CreateUserDto) {
-14     return this.authService.register(body);
-15   }
-16 }
-
-Фрагмент auth модуля:
-1  @Module({
-2    imports: [
-3      UsersModule,
-4      JwtModule.registerAsync({
-5        global: true,
-6        imports: [ConfigModule],
-7        useFactory: async (configService: ConfigService) => ({
-8          secret: configService.get<string>('JWT_SECRET'),
-9          signOptions: { expiresIn: '1d' },
-10       }),
-11       inject: [ConfigService],
-12     }),
-13   ],
-14   controllers: [AuthController],
-15   providers: [AuthService],
-16   exports: [AuthService],
-17 })
-
-Фрагмент схеми user:
-1  @Schema({ timestamps: true })
-2  export class User {
-3    @Prop({ required: true })
-4    name: string;
-5
-6    @Prop({ required: true, unique: true })
-7    email: string;
-8
-9    @Prop({ required: true })
-10   password: string;
-11
-12   @Prop({ required: true, enum: USER_ROLES_VALUES })
-13   role: UserRole;
-14 }
-
-Фрагмент сервісу users модуля:
-1  @Injectable()
-2  export class UsersService {
-3    constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
-4
-5    async create(createUserDto: CreateUserDto) {
-6      const user = this.userModel.create(createUserDto);
-7      return user;
-8    }
-9
-10   async findAll() {
-11     const user = await this.userModel.find().exec();
-12     return user;
-13   }
-14
-15   async findByEmail(email: string) {
-16     const user = await this.userModel.findOne({ email }).exec();
-17     return user;
-18   }
-19
-20   async findById(id: string) {
-21     const user = await this.userModel.findById(id).exec();
-22     return user;
-23   }
-24
-25   async updateById(id: string, updateUserDto: UpdateUserDto) {
-26     const user = await this.userModel.findOneAndUpdate(
-27       { _id: id },
-28       updateUserDto,
-29       {
-30         new: true,
-31       },
-32     );
-33
-34     return user;
-35   }
-36
-37   async deleteById(id: string) {
-38     const user = await this.userModel.findOneAndDelete({ _id: id });
-39     return user;
-40   }
-41 }
-
-Фрагмент контролеру users модуля:
-1  @Controller('users')
-2  export class UsersController {
-3    constructor(private readonly userService: UsersService) {}
-4
-5    @Post()
-6    async create(@Body() body: CreateUserDto) {
-7      return this.userService.create(body);
-8    }
-9
-10   @Get()
-11   async findAll() {
-12     return this.userService.findAll();
-13   }
-14
-15   @Get('me')
-16   getProfile(@Request() req) {
-17     return req.user;
-18   }
-19
-20   @Get(':id')
-21   async findById(@Param('id') id: string) {
-22     return this.userService.findById(id);
-23   }
-24
-25   @Put(':id')
-26   async updateById(@Param('id') id: string, @Body() body: UpdateUserDto) {
-27     return this.userService.updateById(id, body);
-28   }
-29
-30   @Delete('me')
-31   async deleteById(@Request() req) {
-32     const id = req.user?.sub;
-33
-34     return this.userService.deleteById(id);
-35   }
-36 }
- 
-ДОДАТОК Е
-ВІДЕО НА ЮТУБ
-
-https://youtu.be/V_vXy5z5R6E
