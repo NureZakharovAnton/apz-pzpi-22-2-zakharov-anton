@@ -8,9 +8,9 @@
 
 
 ЗВІТ
-З дисципліни «Архітектура програмного забезпечення»
-З лабораторної роботи №2
-на тему: «РОЗРОБКА СЕРВЕРНОЇ ЧАСТИНИ СИСТЕМИ»
+З дисципліни «Аналіз та рефакторинг коду»
+З лабораторної роботи №3
+на тему:” РОЗРОБКА ВЕБКЛІЄНТА СИСТЕМИ"
 
 
 
@@ -25,61 +25,22 @@
 
 
 
-Харків 2025
+Харків 2024
 
-МЕТА
-Метою роботи є розробити базу даних для серверної частини та прикладного програмного інтерфейсу для програмної системи управління архівом.
+1 ЗАВДАННЯ
 
-ХІД РОБОТИ
-	Розробка проєкту розпочалась із створення UML діаграми прецедентів, яка відображає всю функціональність системи та взаємодію користувачів з нею. Діаграма наведена в Додатку А.
-Після цього було спроєктовано структуру бази даних та створено ER діаграму (Додаток Б). На основі цієї діаграми було розроблено схему бази даних MongoDB, яка включає всі необхідні колекції та зв'язки між ними. Візуальне представлення структури бази даних знаходиться в Додатку В.
-Наступним етапом стала розробка REST API з використанням сучасного фреймворку NestJS. Для полегшення розробки та тестування було створено детальну документацію API за допомогою Postman (Додаток Г). Всі ендпоінти були протестовані за допомогою Postman, а колекція тестів збережена для подальшого використання. Відео захисту наведено в Додатку Е.
-В процесі імплементації API було застосовано ряд сучасних технологічних рішень:
-1.	Архітектура системи побудована за багаторівневим принципом:
-•	Клієнтський рівень: відправка HTTP-запитів до API
-•	Серверний рівень: NestJS застосунок для обробки запитів
-•	Рівень даних: MongoDB для зберігання інформації
-2.	NestJS був обраний як основний фреймворк через:
-•	Прогресивну архітектуру з підтримкою модулів
-•	Нативну інтеграцію з TypeScript
-•	Потужну систему декораторів
-•	Вбудований механізм Dependency Injection
-•	Гнучку систему middleware
-3.	Для взаємодії з базою даних використано Mongoose ODM, що надає:
-•	Зручні інструменти для роботи зі схемами
-•	Вбудовані механізми валідації
-•	Повну підтримку TypeScript
-•	Простий спосіб створення та управління зв'язками
-4.	Валідація даних забезпечується на різних рівнях:
-•	DTO валідація через class-validator
-•	Трансформація об'єктів за допомогою class-transformer
-•	Валідація на рівні бази даних через Mongoose схеми
-5.	MongoDB обрана як СУБД через:
-•	Гнучкість схеми даних
-•	Високу швидкодію
-•	Можливості горизонтального масштабування
-•	Природну роботу з JSON-подібними документами
-Вся кодова база проєкту доступна в репозиторії GitHub, а ключові фрагменти коду представлені в Додатку Д.
+     Метою даного лабораторного заняття є розробка клієнтської / front-end частини програмної системи.
 
- 
- 
+2 ОПИС ВИКОНАНОЇ РОБОТИ
+
+     Було розроблено сучасний адаптивний фронтенд у вигляді адмін-панелі з використанням Material UI. Інтерфейс зручний у користуванні та відповідає стилю всього проєкту. Реалізовано перегляд усіх робіт, власних пропозицій і робіт, профілю, відгуків та платежів. Також додано можливість редагування профілю, створення та редагування робіт, а також вихід із облікового запису. Усі дані завантажуються з бекенду через захищені запити з токеном авторизації.
+
 ВИСНОВКИ
-В ході розробки проекту було створено комплексну UML діаграму прецедентів та ER діаграму для системи. На основі цієї документації було розроблено базу даних MongoDB з відповідними колекціями та схемами, а також створено детальну API документацію за допомогою Postman. Серверна частина системи була реалізована з використанням сучасного фреймворку NestJS, який забезпечує модульну архітектуру та підтримку TypeScript. Для роботи з базою даних було обрано Mongoose ODM, що надає зручні інструменти для управління схемами та валідації даних. Валідація запитів забезпечується за допомогою class-validator та class-transformer, а тестування API здійснювалось через Postman.
+
+У результаті було створено веб застосунок на реакті.
 
 ДОДАТОК А
-Відеозапис
-
-     Відеозапис презентації результатів лабораторної роботи: https://youtu.be/V_vXy5z5R6E
-
-Хронологічний опис відеозапису: 
-00:00 - Тестування Users API
-02:33 - Тестування Auth API
-03:56 - Тестування Jobs API
-05:48 - Тестування Proposals API
-07:02 - Тестування Job Attempts API
-07:59 - Тестування Payments API
-08:16 - Тестування Reviews API
-08:51 - Тестування валідації
+Відеозапис презентації результатів лабораторної роботи: https://youtu.be/u8PsCRcRMlk
 
 ДОДАТОК Б
 Графічні матеріали
@@ -95,1151 +56,321 @@
 ДОДАТОК В
 Програмний код
 
-В.1 Математична обробка прикладних даних
-GitHub репозиторій: https://github.com/NureZakharovAnton/apz-pzpi-22-2-zakharov-anton/blob/main/Lab2/backend/src/modules/payments/payments.controller.ts
+В.1 Математична обробка прикладних даних.
+     GitHub репозиторій: https://github.com/NureZakharovAnton/apz-pzpi-22-2-zakharov-anton/blob/main/Lab3/frontend/src/App.tsx
 
-import { Injectable } from '@nestjs/common';
-import { MailerService } from '@nestjs-modules/mailer';
-import { ConfigService } from '@nestjs/config';
+// ========== src/App.tsx ==========
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import AdminPanel from './components/AdminPanel';
+import Login from './components/Login';
+import Register from './components/Register';
+import UserPanel from './components/UserPanel';
 
-@Injectable()
-export class MailService {
-  constructor(
-    private mailerService: MailerService,
-    private configService: ConfigService,
-  ) {}
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/admin" element={<AdminPanel />} />
+        <Route path="/user" element={<UserPanel />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    </Router>
+  );
+}
 
-  private async sendMail(options: {
-    to: string;
-    subject: string;
-    template: string;
-    context: any;
-  }) {
+export default App;
+
+// ========== src/main.tsx ==========
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import './index.css'
+import App from './App.tsx'
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+)
+
+В.2 Адміністрування бізнес-логіки системи.
+
+     GitHub репозиторій: https://github.com/NureZakharovAnton/apz-pzpi-22-2-zakharov-anton/blob/main/Lab3/frontend/src/components/AdminPanel.tsx
+
+// ========== src/components/AdminPanel.tsx ==========
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Box, CssBaseline, Drawer, AppBar, Toolbar, Typography, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Button } from '@mui/material';
+import PeopleIcon from '@mui/icons-material/People';
+import RateReviewIcon from '@mui/icons-material/RateReview';
+import DescriptionIcon from '@mui/icons-material/Description';
+import PaymentIcon from '@mui/icons-material/Payment';
+import WorkIcon from '@mui/icons-material/Work';
+import LogoutIcon from '@mui/icons-material/Logout';
+import UsersDataGrid from './UsersDataGrid';
+import ReviewsDataGrid from './ReviewsDataGrid';
+import ProposalsDataGrid from './ProposalsDataGrid';
+import PaymentsDataGrid from './PaymentsDataGrid';
+import JobsDataGrid from './JobsDataGrid';
+
+const drawerWidth = 220;
+
+const navItems = [
+  { label: 'Users', icon: <PeopleIcon /> },
+  { label: 'Reviews', icon: <RateReviewIcon /> },
+  { label: 'Proposals', icon: <DescriptionIcon /> },
+  { label: 'Payments', icon: <PaymentIcon /> },
+  { label: 'Jobs', icon: <WorkIcon /> },
+];
+
+function PlaceholderGrid({ label }: { label: string }) {
+  return (
+    <Box sx={{ p: 3 }}>
+      <Typography variant="h5">{label} Data Grid (coming soon)</Typography>
+    </Box>
+  );
+}
+
+export default function AdminPanel() {
+  const [selected, setSelected] = useState(0);
+  const navigate = useNavigate();
+
+  const handleSignOut = () => {
+    localStorage.removeItem('accessToken');
+    navigate('/login');
+  };
+
+  return (
+    <Box sx={{ display: 'flex' }}>
+      <CssBaseline />
+      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+        <Toolbar>
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+            Admin Panel
+          </Typography>
+          <Button color="inherit" startIcon={<LogoutIcon />} onClick={handleSignOut}>
+            Sign Out
+          </Button>
+        </Toolbar>
+      </AppBar>
+      <Drawer
+        variant="permanent"
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
+        }}
+      >
+        <Toolbar />
+        <Box sx={{ overflow: 'auto' }}>
+          <List>
+            {navItems.map((item, idx) => (
+              <ListItem key={item.label} disablePadding>
+                <ListItemButton selected={selected === idx} onClick={() => setSelected(idx)}>
+                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemText primary={item.label} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      </Drawer>
+      <Box component="main" sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3, minHeight: '100vh' }}>
+        <Toolbar />
+        {selected === 0 && <UsersDataGrid />}
+        {selected === 1 && <ReviewsDataGrid />}
+        {selected === 2 && <ProposalsDataGrid />}
+        {selected === 3 && <PaymentsDataGrid />}
+        {selected === 4 && <JobsDataGrid />}
+      </Box>
+    </Box>
+  );
+}
+
+// ========== src/components/UserPanel.tsx ==========
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Box, CssBaseline, Drawer, AppBar, Toolbar, Typography, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Button } from '@mui/material';
+import WorkIcon from '@mui/icons-material/Work';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import ListAltIcon from '@mui/icons-material/ListAlt';
+import PersonIcon from '@mui/icons-material/Person';
+import RateReviewIcon from '@mui/icons-material/RateReview';
+import PaymentIcon from '@mui/icons-material/Payment';
+import LogoutIcon from '@mui/icons-material/Logout';
+import JobsList from './UserPanelJobsList';
+import MyProposals from './UserPanelMyProposals';
+import ProfileSettings from './UserPanelProfileSettings';
+import MyJobs from './UserPanelMyJobs';
+import ReviewsList from './UserPanelReviewsList';
+import PaymentsList from './UserPanelPaymentsList';
+
+const drawerWidth = 220;
+
+const navItems = [
+  { label: 'Jobs', icon: <WorkIcon /> },
+  { label: 'My Proposals', icon: <AssignmentIcon /> },
+  { label: 'My Jobs', icon: <ListAltIcon /> },
+  { label: 'Profile', icon: <PersonIcon /> },
+  { label: 'Reviews', icon: <RateReviewIcon /> },
+  { label: 'Payments', icon: <PaymentIcon /> },
+];
+ 
+В.3 Резервне копіювання користувацьких даних
+
+     GitHub репозиторій: https://github.com/NureZakharovAnton/apz-pzpi-22-2-zakharov-anton/blob/main/Lab3/backend/src/modules/backups/backups.service.ts
+
+
+export default function UserPanel() {
+  const [selected, setSelected] = useState(0);
+  const navigate = useNavigate();
+
+  const handleSignOut = () => {
+    localStorage.removeItem('accessToken');
+    navigate('/login');
+  };
+
+  return (
+    <Box sx={{ display: 'flex' }}>
+      <CssBaseline />
+      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+        <Toolbar>
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+            User Panel
+          </Typography>
+          <Button color="inherit" startIcon={<LogoutIcon />} onClick={handleSignOut}>
+            Sign Out
+          </Button>
+        </Toolbar>
+      </AppBar>
+      <Drawer
+        variant="permanent"
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
+        }}
+      >
+        <Toolbar />
+        <Box sx={{ overflow: 'auto' }}>
+          <List>
+            {navItems.map((item, idx) => (
+              <ListItem key={item.label} disablePadding>
+                <ListItemButton selected={selected === idx} onClick={() => setSelected(idx)}>
+                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemText primary={item.label} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      </Drawer>
+      <Box component="main" sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3, minHeight: '100vh' }}>
+        <Toolbar />
+        {selected === 0 && <JobsList />}
+        {selected === 1 && <MyProposals />}
+        {selected === 2 && <MyJobs />}
+        {selected === 3 && <ProfileSettings />}
+        {selected === 4 && <ReviewsList />}
+        {selected === 5 && <PaymentsList />}
+      </Box>
+    </Box>
+  );
+}
+
+// ========== src/components/Login.tsx ==========
+import { useState } from 'react';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
+import { Box, Paper, Typography, TextField, Button, Alert, Link } from '@mui/material';
+
+function parseJwt(token: string) {
+  try {
+    return JSON.parse(atob(token.split('.')[1]));
+  } catch {
+    return null;
+  }
+}
+
+export default function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
     try {
-      this.mailerService.sendMail({
-        to: options.to,
-        subject: options.subject,
-        template: options.template,
-        context: {
-          ...options.context,
-          appName: 'App',
-          supportEmail: this.configService.get('MAIL_PROVIDER_EMAIL'),
-          currentYear: new Date().getFullYear(),
-        },
+      const res = await fetch('/api/v1/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
       });
-      return true;
-    } catch (error) {
-      console.error('Email sending failed:', error);
-      return false;
-    }
-  }
-
-  async sendWelcomeEmail(user: { email: string; name: string }) {
-    return await this.sendMail({
-      to: user.email,
-      subject: 'Welcome to Our Platform!',
-      template: 'welcome',
-      context: {
-        name: user.name,
-      },
-    });
-  }
-
-  async sendAccountDeletionEmail(user: { email: string; name: string }) {
-    return await this.sendMail({
-      to: user.email,
-      subject: 'Account Deletion Confirmation',
-      template: 'account-deletion',
-      context: {
-        name: user.name,
-        appName: 'App',
-        currentYear: new Date().getFullYear(),
-        supportEmail: this.configService.get('MAIL_PROVIDER_EMAIL'),
-      },
-    });
-  }
-
-  async sendInvoiceEmail(options: {
-    email: string;
-    name: string;
-    invoiceNumber: string;
-    amount: number;
-  }) {
-    return await this.sendMail({
-      to: options.email,
-      subject: `Invoice #${options.invoiceNumber}`,
-      template: 'invoice',
-      context: {
-        name: options.name,
-        invoiceNumber: options.invoiceNumber,
-        amount: options.amount,
-      },
-    });
-  }
-}
-
-Фрагмент сервісу auth модуля:
-1  @Injectable()
-2  export class AuthService {
-3    constructor(
-4      private readonly usersService: UsersService,
-5      private readonly jwtService: JwtService,
-6    ) {}
-7
-8    async login(email: string, password: string) {
-9      const user = await this.validateUser(email, password);
-10     if (!user) {
-11       throw new UnauthorizedException('Invalid credentials');
-12     }
-13
-14     const payload = { sub: user._id, email: user.email };
-15     const accessToken = this.jwtService.sign(payload);
-16
-17     return { accessToken };
-18   }
-19
-20   async register(userDto: CreateUserDto) {
-21     const hashedPassword = await bcrypt.hash(userDto.password, 10);
-22     const newUser = { ...userDto, password: hashedPassword };
-23     return this.usersService.create(newUser);
-24   }
-25
-26   async validateUser(email: string, password: string) {
-27     const user = await this.usersService.findByEmail(email);
-28     if (user && (await bcrypt.compare(password, user.password))) {
-29       return user;
-30     }
-31
-32     return null;
-33   }
-34 }
-
-Фрагмент контролеру auth модуля:
-1  @Controller('auth')
-2  export class AuthController {
-3    constructor(private readonly authService: AuthService) {}
-4
-5    @Public()
-6    @Post('login')
-7    async login(@Body() body: LoginDto) {
-8      return this.authService.login(body.email, body.password);
-9    }
-10
-11   @Public()
-12   @Post('register')
-13   async register(@Body() body: CreateUserDto) {
-14     return this.authService.register(body);
-15   }
-16 }
-
-Фрагмент auth модуля:
-1  @Module({
-2    imports: [
-3      UsersModule,
-4      JwtModule.registerAsync({
-5        global: true,
-6        imports: [ConfigModule],
-7        useFactory: async (configService: ConfigService) => ({
-8          secret: configService.get<string>('JWT_SECRET'),
-9          signOptions: { expiresIn: '1d' },
-10       }),
-11       inject: [ConfigService],
-12     }),
-13   ],
-14   controllers: [AuthController],
-15   providers: [AuthService],
-16   exports: [AuthService],
-17 })
-
-Фрагмент схеми user:
-1  @Schema({ timestamps: true })
-2  export class User {
-3    @Prop({ required: true })
-4    name: string;
-5
-6    @Prop({ required: true, unique: true })
-7    email: string;
-8
-9    @Prop({ required: true })
-10   password: string;
-11
-12   @Prop({ required: true, enum: USER_ROLES_VALUES })
-13   role: UserRole;
-14 }
-
-Фрагмент сервісу users модуля:
-1  @Injectable()
-2  export class UsersService {
-3    constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
-4
-5    async create(createUserDto: CreateUserDto) {
-6      const user = this.userModel.create(createUserDto);
-7      return user;
-8    }
-9
-10   async findAll() {
-11     const user = await this.userModel.find().exec();
-12     return user;
-13   }
-14
-15   async findByEmail(email: string) {
-16     const user = await this.userModel.findOne({ email }).exec();
-17     return user;
-18   }
-19
-20   async findById(id: string) {
-21     const user = await this.userModel.findById(id).exec();
-22     return user;
-23   }
-24
-25   async updateById(id: string, updateUserDto: UpdateUserDto) {
-26     const user = await this.userModel.findOneAndUpdate(
-27       { _id: id },
-28       updateUserDto,
-29       {
-30         new: true,
-31       },
-32     );
-33
-34     return user;
-35   }
-36
-37   async deleteById(id: string) {
-38     const user = await this.userModel.findOneAndDelete({ _id: id });
-39     return user;
-40   }
-41 }
-
-Фрагмент контролеру users модуля:
-1  @Controller('users')
-2  export class UsersController {
-3    constructor(private readonly userService: UsersService) {}
-4
-5    @Post()
-6    async create(@Body() body: CreateUserDto) {
-7      return this.userService.create(body);
-8    }
-9
-10   @Get()
-11   async findAll() {
-12     return this.userService.findAll();
-13   }
-14
-15   @Get('me')
-16   getProfile(@Request() req) {
-17     return req.user;
-18   }
-19
-20   @Get(':id')
-21   async findById(@Param('id') id: string) {
-22     return this.userService.findById(id);
-23   }
-24
-25   @Put(':id')
-26   async updateById(@Param('id') id: string, @Body() body: UpdateUserDto) {
-27     return this.userService.updateById(id, body);
-28   }
-29
-30   @Delete('me')
-31   async deleteById(@Request() req) {
-32     const id = req.user?.sub;
-33
-34     return this.userService.deleteById(id);
-35   }
-36 }
-
-В.2 Резервне копіювання користувацьких даних
-GitHub репозиторій: https://github.com/NureZakharovAnton/apz-pzpi-22-2-zakharov-anton/blob/main/Lab2/backend/src/modules/backups/backups.service.ts
-
-import { Injectable } from '@nestjs/common';
-import { exec } from 'child_process';
-import { promisify } from 'util';
-import * as path from 'path';
-import * as fs from 'fs';
-
-const execAsync = promisify(exec);
-
-@Injectable()
-export class BackupsService {
-  private readonly backupDir = path.join(process.cwd(), 'backups');
-
-  constructor() {
-    if (!fs.existsSync(this.backupDir)) {
-      fs.mkdirSync(this.backupDir, { recursive: true });
-    }
-  }
-
-  async createBackup() {
-    try {
-      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-      const backupPath = path.join(this.backupDir, `backup-${timestamp}`);
-
-      const command = `mongodump --uri="${process.env.MONGO_URI}" --out="${backupPath}"`;
-
-      const { stderr } = await execAsync(command);
-
-      if (stderr && !stderr.includes('done dumping')) {
-        throw new Error(stderr);
+      if (!res.ok) throw new Error('Invalid credentials');
+      const data = await res.json();
+      localStorage.setItem('accessToken', data.accessToken);
+      const payload = parseJwt(data.accessToken);
+      if (payload && payload.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/user');
       }
-
-      return {
-        success: true,
-        message: 'Backup created successfully',
-        path: backupPath,
-        timestamp,
-      };
-    } catch (error) {
-      throw new Error(`Backup failed: ${error.message}`);
+    } catch (err: any) {
+      setError(err.message || 'Login failed');
+    } finally {
+      setLoading(false);
     }
-  }
-
-  async listBackups() {
-    try {
-      const files = await fs.promises.readdir(this.backupDir);
-      return files.map((file) => ({
-        name: file,
-        path: path.join(this.backupDir, file),
-        createdAt: fs.statSync(path.join(this.backupDir, file)).birthtime,
-      }));
-    } catch (error) {
-      throw new Error(`Failed to list backups: ${error.message}`);
-    }
-  }
-
-  async restoreBackup(backupName: string) {
-    try {
-      const backupPath = path.join(this.backupDir, backupName, 'db');
-
-      if (!fs.existsSync(backupPath)) {
-        throw new Error('Backup not found');
-      }
-
-      const command = `mongorestore --uri="${process.env.MONGO_URI}" --drop --nsInclude="db.*" "${backupPath}"`;
-
-      const { stderr } = await execAsync(command);
-
-      if (stderr && !stderr.includes('successfully')) {
-        throw new Error(stderr);
-      }
-
-      const successMatch = stderr.match(
-        /(\d+) document\(s\) restored successfully/,
-      );
-      const restoredCount = successMatch ? parseInt(successMatch[1]) : 0;
-
-      return {
-        success: true,
-        message: `Backup restored successfully. ${restoredCount} documents restored.`,
-        backupName,
-        restoredCount,
-      };
-    } catch (error) {
-      throw new Error(`Restore failed: ${error.message}`);
-    }
-  }
-}
-
-import { Controller, Post, Get, Param } from '@nestjs/common';
-import { Roles } from '../users/users.decorators';
-import { USER_ROLES } from '../users/user.constants';
-import { BackupsService } from './backups.service';
-
-@Roles(USER_ROLES.ADMIN)
-@Controller('backups')
-export class BackupsController {
-  constructor(private readonly backupService: BackupsService) {}
-
-  @Get()
-  async listBackups() {
-    return this.backupService.listBackups();
-  }
-
-  @Post()
-  async createBackup() {
-    return this.backupService.createBackup();
-  }
-
-  @Post(':name')
-  async restoreBackup(@Param('name') name: string) {
-    return this.backupService.restoreBackup(name);
-  }
-}
-
-В.3 Адміністрування бізнес-логіки системи
-GitHub репозиторій: https://github.com/NureZakharovAnton/apz-pzpi-22-2-zakharov-anton/blob/main/Lab2/backend/src/modules/users/users.guards.ts
-
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
-import { UserRole } from './user.types';
-import { ALLOW_SAME_USER, ROLES_KEY } from './users.decorators';
-
-@Injectable()
-export class RolesGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
-
-  canActivate(context: ExecutionContext): boolean {
-    const requiredRoles = this.reflector.getAllAndOverride<UserRole[]>(
-      ROLES_KEY,
-      [context.getHandler(), context.getClass()],
-    );
-
-    const isSameUserAllowed = this.reflector.getAllAndOverride<boolean>(
-      ALLOW_SAME_USER,
-      [context.getHandler(), context.getClass()],
-    );
-
-    if (!requiredRoles) {
-      return true;
-    }
-
-    const { user } = context.switchToHttp().getRequest();
-
-    const isSameUser = user?.sub === context.getArgs()[0].params.id;
-    const isRoleAllowed = this.matchRoles(requiredRoles, user.role);
-
-    const isAllowed = isRoleAllowed || (isSameUserAllowed && isSameUser);
-    return isAllowed;
-  }
-
-  matchRoles(requiredRoles: UserRole[], userRole: UserRole) {
-    return requiredRoles.some((role) => userRole?.includes(role));
-  }
-}
-
-Приклад використання:
-
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
-import { Roles } from '../users/users.decorators';
-import { USER_ROLES } from '../users/user.constants';
-import { MailService } from '../mail/mail.service';
-import { User } from '../users/user.entity';
-import { PaymentService } from './payments.service';
-import { CreatePaymentDto } from './payments.dto';
-
-@Controller('payments')
-export class PaymentController {
-  constructor(
-    private readonly paymentService: PaymentService,
-    private readonly mailService: MailService,
-  ) {}
-
-  @Roles(USER_ROLES.ADMIN, USER_ROLES.CUSTOMER)
-  @Post()
-  async create(@Body() body: CreatePaymentDto) {
-    const payment = await this.paymentService.create(body);
-    await payment.populate('user');
-    const user = payment.user as unknown as User;
-
-    this.mailService.sendInvoiceEmail({
-      email: user.email,
-      name: user.name,
-      amount: payment.amount,
-      invoiceNumber: payment.id,
-    });
-
-    return payment;
-  }
-
-  @Roles(USER_ROLES.ADMIN)
-  @Get()
-  async findAll() {
-    return this.paymentService.findAll();
-  }
-
-  @Get(':id')
-  async findById(@Param('id') id: string) {
-    return this.paymentService.findById(id);
-  }
-}
-
-ДОДАТОК Г
-СПЕЦИФІКАЦІЯ API
-Authentication
-•	All endpoints except Login and Register require Bearer Token authentication
-•	Token format: Bearer <your_jwt_token>
-•	Tokens expire after 24 hours
-
-HTTP Status Codes
-•	200 OK: Successful GET, PUT, PATCH requests
-•	201 Created: Successful POST requests
-•	204 No Content: Successful DELETE requests
-•	400 Bad Request: Invalid request payload or parameters
-•	401 Unauthorized: Missing or invalid authentication
-•	403 Forbidden: Authenticated but insufficient permissions
-•	404 Not Found: Resource not found
-•	500 Internal Server Error: Server error
-
-Common Query Parameters
-All list endpoints support:
-?page=1           // Page number
-?limit=10         // Items per page
-?sort=field:desc  // Sort by field
-?search=term      // Search term
-
-Authentication Endpoints
-Register
-POST /auth/register
-Create new user account
-Body:
-
-{
-    "email": "user@example.com",
-    "password": "SecurePass123",
-    "name": "John Doe",
-    "role": "customer"
-}
-
-Validation:
-•	email: Required, valid email format, unique
-•	password: Min 8 chars, must contain upper, lower, number
-•	name: Required, 2-50 chars
-•	role: Either "customer" or "freelancer"
-
-Response (201 Created):
-
-{
-    "status": "success",
-    "data": {
-        "user": {
-            "id": "123...",
-            "email": "user@example.com",
-            "name": "John Doe",
-            "role": "customer",
-            "createdAt": "2023-12-20T..."
-        },
-        "token": "eyJhbG..."
-    }
-}
-
-Login
-POST /auth/login
-Authenticate existing user
-Body:
-
-{
-    "email": "user@example.com",
-    "password": "SecurePass123"
-}
-Response (200 OK):
-
-{
-    "status": "success",
-    "data": {
-        "token": "eyJhbG...",
-        "user": {
-            "id": "123...",
-            "email": "user@example.com",
-            "name": "John Doe",
-            "role": "customer"
-        }
-    }
-}
-
-Users Endpoints
-Get All Users
-GET /users
-Retrieve paginated list of users
-Auth Required: Yes Permissions: Admin or platform manager
-Query Parameters:
-•	role: Filter by role
-•	search: Search in name and email
-•	page: Page number
-•	limit: Users per page
-•	sort: Sort field (e.g., createdAt:desc)
-Response (200 OK):
-{
-    "status": "success",
-    "data": {
-        "users": [
-            {
-                "id": "123...",
-                "email": "user@example.com",
-                "name": "John Doe",
-                "role": "customer",
-                "createdAt": "2023-12-20T...",
-                "updatedAt": "2023-12-20T..."
-            }
-        ],
-        "pagination": {
-            "total": 100,
-            "pages": 10,
-            "current": 1,
-            "limit": 10
-        }
-    }
-}
-
-Get User By ID
-GET /users/:id
-Retrieve specific user by ID
-Auth Required: Yes Permissions: Own user or admin Parameters:
-•	id: User's MongoDB ObjectId
-Response (200 OK):
-
-{
-    "status": "success",
-    "data": {
-        "user": {
-            "id": "123...",
-            "email": "user@example.com",
-            "name": "John Doe",
-            "role": "customer",
-            "createdAt": "2023-12-20T...",
-            "updatedAt": "2023-12-20T..."
-        }
-    }
-}
-
-Get Current User
-GET /users/me
-Retrieve current authenticated user
-Auth Required: Yes
-Response (200 OK):
-
-{
-    "status": "success",
-    "data": {
-        "user": {
-            "id": "123...",
-            "email": "user@example.com",
-            "name": "John Doe",
-            "role": "customer",
-            "createdAt": "2023-12-20T...",
-            "updatedAt": "2023-12-20T..."
-        }
-    }
-}
-
-Update User
-PUT /users/:id
-Update user information
-Auth Required: Yes Permissions: Own user or admin
-Body:
-
-{
-    "name": "Updated Name",
-    "email": "newemail@example.com"
-}
-
-Validation:
-•	email: Valid email format, unique
-•	name: 2-50 chars
-•	Cannot update role through this endpoint
-Response (200 OK):
-{
-    "status": "success",
-    "data": {
-        "user": {
-            "id": "123...",
-            "email": "newemail@example.com",
-            "name": "Updated Name",
-            "role": "customer",
-            "updatedAt": "2023-12-20T..."
-        }
-    }
-}
-
-Delete User
-DELETE /users/me
-Delete current user account
-Auth Required: Yes Permissions: Own user or admin
-Response (204 No Content)
-
-Jobs Endpoints
-Get All Jobs
-GET /jobs
-Retrieve paginated list of jobs
-Auth Required: Yes
-Query Parameters:
-•	status: Filter by status (open, in_progress, completed)
-•	creator: Filter by creator ID
-•	minPrice/maxPrice: Price range filtering
-•	page: Page number
-•	limit: Jobs per page
-•	sort: Sort field (e.g., createdAt:desc)
-
-Response (200 OK):
-{
-    "status": "success",
-    "data": {
-        "jobs": [
-            {
-                "id": "123...",
-                "name": "Website Development",
-                "description": "Create a responsive website",
-                "price": 1000,
-                "status": "open",
-                "creator": {
-                    "id": "456...",
-                    "name": "John Doe"
-                },
-                "createdAt": "2023-12-20T...",
-                "updatedAt": "2023-12-20T..."
-            }
-        ],
-        "pagination": {
-            "total": 100,
-            "pages": 10,
-            "current": 1,
-            "limit": 10
-        }
-    }
-}
-
-Create Job
-POST /jobs
-Create a new job
-Auth Required: Yes Role Required: Customer
-Body:
-{
-    "name": "Website Development",
-    "description": "Detailed project description",
-    "price": 1000,
-    "requirements": ["React", "Node.js"],
-    "deadline": "2024-02-01T00:00:00Z"
-}
-
-Validation:
-•	name: Required, 3-100 chars
-•	description: Required, max 2000 chars
-•	price: Required, number > 0
-•	requirements: Optional array of strings
-•	deadline: Optional, must be future date
-
-Response (201 Created):
-
-{
-    "status": "success",
-    "data": {
-        "job": {
-            "id": "123...",
-            "name": "Website Development",
-            "description": "Detailed project description",
-            "price": 1000,
-            "status": "open",
-            "creator": {
-                "id": "456...",
-                "name": "John Doe"
-            },
-            "requirements": ["React", "Node.js"],
-            "deadline": "2024-02-01T00:00:00Z",
-            "createdAt": "2023-12-20T..."
-        }
-    }
-}
-
-Get Job By ID
-GET /jobs/:id
-Retrieve specific job details
-Auth Required: Yes Parameters:
-•	id: Job's MongoDB ObjectId
-Response (200 OK):
-
-{
-    "status": "success",
-    "data": {
-        "job": {
-            "id": "123...",
-            "name": "Website Development",
-            "description": "Detailed project description",
-            "price": 1000,
-            "status": "open",
-            "creator": {
-                "id": "456...",
-                "name": "John Doe"
-            },
-            "createdAt": "2023-12-20T...",
-            "updatedAt": "2023-12-20T..."
-        }
-    }
-}
-
-Update Job
-PUT /jobs/:id
-Update job details
-Auth Required: Yes Permissions: Job creator only Parameters:
-•	id: Job's MongoDB ObjectId
-Body:
-
-{
-    "name": "Updated Website Project",
-    "description": "Updated description",
-    "price": 1200
-}
-
-Validation:
-•	Cannot update if job status is not 'open'
-•	Same validation rules as creation
-
-Response (200 OK):
-{
-    "status": "success",
-    "data": {
-        "job": {
-            "id": "123...",
-            "name": "Updated Website Project",
-            "description": "Updated description",
-            "price": 1200,
-            // ... other fields
-        }
-    }
-}
-
-Delete Job
-DELETE /jobs/:id
-Delete a job
-Auth Required: Yes Permissions: Job creator only Parameters:
-•	id: Job's MongoDB ObjectId
-Validation:
-•	Cannot delete if job has active proposals or is in progress
-Response (204 No Content)
-
-Proposals Endpoints
-Create Proposal
-POST /proposals
-Submit a proposal for a job
-Auth Required: Yes Role Required: Freelancer
-Body:
-{
-    "jobId": "123...",
-    "coverLetter": "I am interested in this project...",
-    "expectedDuration": 14, // days
-    "proposedPrice": 950
-}
-
-Validation:
-•	jobId: Must exist and be 'open'
-•	coverLetter: Required, max 1000 chars
-•	expectedDuration: Required, number > 0
-•	proposedPrice: Required, number > 0
-•	User cannot submit multiple proposals for same job
-Response (201 Created):
-{
-    "status": "success",
-    "data": {
-        "proposal": {
-            "id": "789...",
-            "job": {
-                "id": "123...",
-                "name": "Website Development"
-            },
-            "freelancer": {
-                "id": "456...",
-                "name": "Jane Smith"
-            },
-            "coverLetter": "I am interested...",
-            "expectedDuration": 14,
-            "proposedPrice": 950,
-            "status": "pending",
-            "createdAt": "2023-12-20T..."
-        }
-    }
-}
-
-6. Job Attempts Endpoints
-Get All Job Attempts
-GET /jobs/:jobId/attempts
-Retrieve all attempts for a specific job
-Auth Required: Yes Permissions: Job creator or assigned freelancer Parameters:
-•	jobId: Job's MongoDB ObjectId
-Query Parameters:
-•	status: Filter by status
-•	page: Page number
-•	limit: Items per page
-Response (200 OK):
-{
-    "status": "success",
-    "data": {
-        "attempts": [
-            {
-                "id": "123...",
-                "job": {
-                    "id": "456...",
-                    "name": "Website Development"
-                },
-                "status": "in_progress",
-                "assignees": [
-                    {
-                        "user": {
-                            "id": "789...",
-                            "name": "Jane Smith"
-                        },
-                        "status": "active"
-                    }
-                ],
-                "startedAt": "2023-12-20T...",
-                "completedAt": null,
-                "createdAt": "2023-12-20T...",
-                "updatedAt": "2023-12-20T..."
-            }
-        ],
-        "pagination": {
-            "total": 5,
-            "pages": 1,
-            "current": 1,
-            "limit": 10
-        }
-    }
-}
-
-Create Job Attempt
-POST /jobs/:jobId/attempts
-Start a new attempt for a job
-Auth Required: Yes Permissions: Job creator only
-Body:
-
-{
-    "assignees": [
-        {
-            "userId": "789...",
-            "role": "developer"
-        }
-    ],
-    "startDate": "2023-12-21T00:00:00Z",
-    "expectedEndDate": "2024-01-21T00:00:00Z"
-}
-
-Validation:
-•	Job must be in 'open' status
-•	Assignees must have accepted proposals
-•	Dates must be valid and in future
-
-Response (201 Created):
-{
-    "status": "success",
-    "data": {
-        "attempt": {
-            "id": "123...",
-            "job": {
-                "id": "456...",
-                "name": "Website Development"
-            },
-            "status": "in_progress",
-            "assignees": [...],
-            "startDate": "2023-12-21T00:00:00Z",
-            "expectedEndDate": "2024-01-21T00:00:00Z",
-            "createdAt": "2023-12-20T..."
-        }
-    }
-}
-
-Update Job Attempt
-PUT /jobs/:jobId/attempts/:id
-Update attempt status or details
-Auth Required: Yes Permissions: Job creator or assigned freelancer
-Body:
-{
-    "status": "completed",
-    "completionNotes": "All requirements fulfilled",
-    "actualEndDate": "2024-01-19T00:00:00Z"
-}
-
-Validation:
-•	Valid status transitions only
-•	Cannot update completed attempts
-•	Proper authorization for status changes
-
-Response (200 OK):
-{
-    "status": "success",
-    "data": {
-        "attempt": {
-            "id": "123...",
-            "status": "completed",
-            "completionNotes": "All requirements fulfilled",
-            "actualEndDate": "2024-01-19T00:00:00Z",
-            // ... other fields
-        }
-    }
-}
-
-Payments Endpoints
-Create Payment
-POST /payments
-Create a new payment for a job
-Auth Required: Yes Permissions: Job creator only
-Body:
-{
-    "jobId": "456...",
-    "amount": 1000,
-    "paymentMethod": "credit_card",
-    "currency": "USD"
-}
-
-Validation:
-•	Job must be completed
-•	Amount must match agreed price
-•	Valid payment method required
-Response (201 Created):
-{
-    "status": "success",
-    "data": {
-        "payment": {
-            "id": "123...",
-            "job": {
-                "id": "456...",
-                "name": "Website Development"
-            },
-            "amount": 1000,
-            "currency": "USD",
-            "status": "pending",
-            "paymentMethod": "credit_card",
-            "paymentIntentId": "pi_...",
-            "createdAt": "2023-12-20T..."
-        }
-    }
-}
-Get All Payments
-GET /payments
-Retrieve payment history
-Auth Required: Yes
-Query Parameters:
-•	status: Payment status
-•	startDate/endDate: Date range
-•	page: Page number
-•	limit: Items per page
-Response (200 OK):
-{
-    "status": "success",
-    "data": {
-        "payments": [
-            {
-                "id": "123...",
-                "job": {
-                    "id": "456...",
-                    "name": "Website Development"
-                },
-                "amount": 1000,
-                "currency": "USD",
-                "status": "completed",
-                "paymentMethod": "credit_card",
-                "createdAt": "2023-12-20T...",
-                "completedAt": "2023-12-20T..."
-            }
-        ],
-        "pagination": {
-            "total": 50,
-            "pages": 5,
-            "current": 1,
-            "limit": 10
-        }
-    }
-}
-
-Reviews Endpoints
-Create Review
-POST /reviews
-Create a review for completed job
-Auth Required: Yes Permissions: Job participants only
-Body:
-{
-    "jobId": "456...",
-    "revieweeId": "789...",
-    "rating": 5,
-    "comment": "Excellent work and communication",
-    "criteria": {
-        "communication": 5,
-        "quality": 5,
-        "timeliness": 4
-    }
-}
-
-Validation:
-•	Job must be completed
-•	Rating: 1-5 stars
-•	Comment: Optional, max 1000 chars
-•	One review per user per job
-•	Must be job participant
-Response (201 Created):
-{
-    "status": "success",
-    "data": {
-        "review": {
-            "id": "123...",
-            "job": {
-                "id": "456...",
-                "name": "Website Development"
-            },
-            "reviewer": {
-                "id": "012...",
-                "name": "John Doe"
-            },
-            "reviewee": {
-                "id": "789...",
-                "name": "Jane Smith"
-            },
-            "rating": 5,
-            "comment": "Excellent work and communication",
-            "criteria": {
-                "communication": 5,
-                "quality": 5,
-                "timeliness": 4
-            },
-            "createdAt": "2023-12-20T..."
-        }
-    }
-}
-
-Get Reviews
-GET /reviews
-Get all reviews (with filtering options)
-Auth Required: Yes
-Query Parameters:
-•	userId: Filter by user (reviewer or reviewee)
-•	jobId: Filter by job
-•	rating: Filter by minimum rating
-•	page: Page number
-•	limit: Items per page
-•	sort: Sort field (e.g., createdAt:desc)
-Response (200 OK):
-{
-    "status": "success",
-    "data": {
-        "reviews": [
-            {
-                "id": "123...",
-                "job": {
-                    "id": "456...",
-                    "name": "Website Development"
-                },
-                "reviewer": {
-                    "id": "012...",
-                    "name": "John Doe"
-                },
-                "reviewee": {
-                    "id": "789...",
-                    "name": "Jane Smith"
-                },
-                "rating": 5,
-                "comment": "Excellent work and communication",
-                "criteria": {
-                    "communication": 5,
-                    "quality": 5,
-                    "timeliness": 4
-                },
-                "createdAt": "2023-12-20T..."
-            }
-        ],
-        "pagination": {
-            "total": 100,
-            "pages": 10,
-            "current": 1,
-            "limit": 10
-        }
-    }
-}
-
-Error Handling
-All endpoints follow consistent error response format:
-
-{
-    "status": "error",
-    "message": "Detailed error message",
-    "errors": [
-        {
-            "field": "email",
-            "message": "Invalid email format"
-        }
-    ],
-    "code": "400"
-}
+  };
+
+  return (
+    <Box sx={{ minHeight: '100vh', width: '100vw', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: 'background.default' }}>
+      <Paper elevation={3} sx={{ p: 4, width: '100%', maxWidth: 400, borderRadius: 3, boxSizing: 'border-box' }}>
+        <Typography variant="h5" align="center" gutterBottom fontWeight={600} color="primary.main">
+          Login
+        </Typography>
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
+          <TextField
+            label="Email"
+            type="email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            required
+            fullWidth
+            margin="normal"
+            autoFocus
+          />
+          <TextField
+            label="Password"
+            type="password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+            fullWidth
+            margin="normal"
+          />
+          {error && <Alert severity="error" sx={{ my: 2 }}>{error}</Alert>}
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            size="large"
+            sx={{ mt: 2, borderRadius: 2 }}
+            disabled={loading}
+          >
+            {loading ? 'Logging in...' : 'Login'}
+          </Button>
+          <Box sx={{ mt: 2, textAlign: 'center' }}>
+            <Link component={RouterLink} to="/register" underline="hover">
+              Don&apos;t have an account? Register
+            </Link>
+          </Box>
+        </Box>
+      </Paper>
+    </Box>
+  );
+} 
