@@ -96,7 +96,7 @@
 Програмний код
 
 В.1 Математична обробка прикладних даних
-GitHub репозиторій: https://github.com/NureZakharovAnton/apz-pzpi-22-2-zakharov-anton
+GitHub репозиторій: https://github.com/NureZakharovAnton/apz-pzpi-22-2-zakharov-anton/blob/main/Lab2/backend/src/modules/payments/payments.controller.ts
 
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
