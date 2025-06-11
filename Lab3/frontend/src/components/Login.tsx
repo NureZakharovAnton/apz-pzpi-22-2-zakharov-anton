@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Box, Paper, Typography, TextField, Button, Alert } from '@mui/material';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
+import { Box, Paper, Typography, TextField, Button, Alert, Link } from '@mui/material';
 
 function parseJwt(token: string) {
   try {
@@ -34,7 +34,7 @@ export default function Login() {
       if (payload && payload.role === 'admin') {
         navigate('/admin');
       } else {
-        navigate('/');
+        navigate('/user');
       }
     } catch (err: any) {
       setError(err.message || 'Login failed');
@@ -81,6 +81,11 @@ export default function Login() {
           >
             {loading ? 'Logging in...' : 'Login'}
           </Button>
+          <Box sx={{ mt: 2, textAlign: 'center' }}>
+            <Link component={RouterLink} to="/register" underline="hover">
+              Don&apos;t have an account? Register
+            </Link>
+          </Box>
         </Box>
       </Paper>
     </Box>

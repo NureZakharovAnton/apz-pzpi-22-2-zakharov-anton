@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Box, Paper, Typography, TextField, Button, Alert, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
+import { Box, Paper, Typography, TextField, Button, Alert, FormControl, InputLabel, Select, MenuItem, Link } from '@mui/material';
 
 const roles = [
   { value: 'customer', label: 'Customer' },
@@ -94,6 +94,11 @@ export default function Register() {
           >
             {loading ? 'Registering...' : 'Register'}
           </Button>
+          <Box sx={{ mt: 2, textAlign: 'center' }}>
+            <Link component={RouterLink} to="/login" underline="hover">
+              Already have an account? Login
+            </Link>
+          </Box>
         </Box>
       </Paper>
     </Box>
